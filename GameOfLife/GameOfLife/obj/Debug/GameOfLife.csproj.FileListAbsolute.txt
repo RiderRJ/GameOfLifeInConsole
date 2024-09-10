@@ -5,3 +5,10 @@ C:\Users\Иван\source\repos\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj
 C:\Users\Иван\source\repos\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CoreCompileInputs.cache
 C:\Users\Иван\source\repos\GameOfLife\GameOfLife\obj\Debug\GameOfLife.exe
 C:\Users\Иван\source\repos\GameOfLife\GameOfLife\obj\Debug\GameOfLife.pdb
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\GameOfLife.exe.config
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\GameOfLife.exe
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\GameOfLife.pdb
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.AssemblyReference.cache
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CoreCompileInputs.cache
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.exe
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.pdb
