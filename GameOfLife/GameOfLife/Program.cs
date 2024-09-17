@@ -1,10 +1,18 @@
 ﻿using System;
+using SFML;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using static GameOfLife.KeyCatcher;
+using SFML.Graphics;
+using System.Linq.Expressions;
+using SFML.System;
+using SFML.Window;
+using System.Runtime.InteropServices;
+using System.Runtime.Remoting.Contexts;
+using System.Security.Permissions;
 
 namespace GameOfLife
 {
@@ -172,6 +180,8 @@ namespace GameOfLife
     }
     public class Program
     {
+        public Font font;
+        public static RenderWindow window;
         private static short height = 80;
         private static short width = 30;
         private static char[,] map = new char[width, height];
@@ -276,12 +286,13 @@ namespace GameOfLife
             CreateMap();
             ReadMap();
         }
-        public virtual async Task Update()//переопределять Init, а не Update
+        public virtual void Update()
         {
             Init();
-            while (true)
+            while (window.IsOpen)
             {
                 frames++;
+                window.DispatchEvents();
                 if (_resumed) //обработка просаживает с 100 до 10 фпс
                 {
                     Cell.nMLivingCells = Cell.livingCells.ToList();
@@ -296,80 +307,41 @@ namespace GameOfLife
                         cell.NextTurn();
                 }
                 Input();
-                await UpdateMap();//просадка со 7 до 4 фпс
-                await Draw(); //без отрисовки ~20 кадров
-                await Task.Delay(1);
+                UpdateMap();//просадка со 7 до 4 фпс
+                Draw(); //без отрисовки ~20 кадров
             }
             instance.Update();
         }
         private async Task Draw()
         {
-            string screen = "";
-            long size = -1;
-            await Task.Run(() =>
+            window.Clear(Color.Black);
+            for(short i = 0; i < map.GetLength(0); i++)
             {
-                Console.Clear();
-                for (int i = 0; i < map.GetLength(0); i++)
+                for (short j = 0; j < map.GetLength(1); j++)
                 {
-                    for (int k = 0; k < map.GetLength(1); k++)
+                    float cWidth = window.Size.X * (1f / map.GetLength(0)) * 1.25f;
+                    float cHeight = window.Size.Y * (1f / map.GetLength(1)) * 1.75f;
+                    RectangleShape cell = new RectangleShape(new Vector2f(cWidth, cHeight))
                     {
-                        if(!_resumed)
+                        FillColor = Color.Blue,
+                        Position = new Vector2f(i * cWidth / 2, j * cHeight / 2)
+                    };
+                    if (Cell.livingCells.FindIndex(c => c == new Cell(i, j)) != -1)
+                        cell.FillColor = Color.White;
+                    if (!_resumed)
+                    {
+                        if (Choice[0, 0] == i && Choice[0, 1] == j)
                         {
-                            Console.BackgroundColor = ConsoleColor.Black;
-                            Console.ForegroundColor = ConsoleColor.White;
-                            if (Choice[0, 0] == i && Choice[0, 1] == k)
-                            {
-                                Console.BackgroundColor = ConsoleColor.Green;
-                                Console.ForegroundColor = ConsoleColor.Black;
-                            }
+                            cell.FillColor = Color.Red;
                         }
-                        //screen += map[i, k];
-                        Console.Write(map[i, k]);
                     }
-                    //screen += "\r\n";
-                    Console.WriteLine();
+                    window.Draw(cell);
                 }
-                //using (Stream s = new MemoryStream())
-                //{
-                //    BinaryFormatter formatter = new BinaryFormatter();
-                //    formatter.Serialize(s, Cell.cells);
-                //    formatter.Serialize(s, Cell.livingCells);
-                //    formatter.Serialize(s, Cell.nMLivingCells);
-                //    size = s.Length;
-                //}
-                //Console.Write(screen);
-                Console.WriteLine($"fps = {fps} tick = {updates} lists memory usage = {size/1024f} KB pressed key = {pressedKey} is playing = {_resumed}");
-            });
+            }
+            window.Display();
         }
         private void Input()//перенести в другой класс. подсосать из того проекта
         {
-            if (pressedKey == ConsoleKey.UpArrow)
-                Choice = new int[,] { { --Choice[0, 0], Choice[0, 1] } };
-            if (pressedKey == ConsoleKey.DownArrow)
-                Choice = new int[,] { { ++Choice[0, 0], Choice[0, 1] } };
-            if (pressedKey == ConsoleKey.LeftArrow)
-                Choice = new int[,] { { Choice[0, 0], --Choice[0, 1] } };
-            if (pressedKey == ConsoleKey.RightArrow)
-                Choice = new int[,] { { Choice[0, 0], ++Choice[0, 1] } };
-            if (pressedKey == ConsoleKey.Enter)
-            {
-                int cellID = Cell.cells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1]));
-                if (Cell.livingCells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1])) == -1)
-                {
-                    Cell.cells[cellID].Alive++;
-                    Cell.livingCells.Add(Cell.cells[cellID]);
-                }
-                else
-                {
-                    Cell.cells[cellID].Alive--;
-                    Cell.livingCells.Remove(Cell.cells[cellID]);
-                }
-            }
-            if (pressedKey == ConsoleKey.Spacebar)
-            {
-                //ReadMap();
-                _resumed = !_resumed;
-            }
         }
         /// <summary>
         /// Правило возвращае целочисленое значение alive -> 0 = мёртв, 1 = жив;
@@ -377,6 +349,13 @@ namespace GameOfLife
         /// <param name="args"></param>
         static void Main(string[] args)
         {
+            window = new RenderWindow(new VideoMode(800, 600), "Game of life");
+            window.Closed += (sender, e) => window.Close();
+            window.KeyPressed += (sender, e) =>
+            {
+                if (e.Code == Keyboard.Key.Escape) { window.Close(); Environment.Exit(0); };
+                instance.OnKeyPressed(e);
+            };
             Cell.rule = delegate (short neighbours, short alive, Cell itself)
             {
                 if (alive == 1)
@@ -400,10 +379,37 @@ namespace GameOfLife
             FPSReset();
             instance = new ChoiceMenu();
             instance.Update();
-            while (true)
+        }
+        public virtual void OnKeyPressed(KeyEventArgs e)
+        {
+            if (e.Code == (Keyboard.Key.Left))
+                Choice = new int[,] { { --Choice[0, 0], Choice[0, 1] } };
+            if (e.Code == (Keyboard.Key.Right))
+                Choice = new int[,] { { ++Choice[0, 0], Choice[0, 1] } };
+            if (e.Code == (Keyboard.Key.Up))
+                Choice = new int[,] { { Choice[0, 0], --Choice[0, 1] } };
+            if (e.Code == (Keyboard.Key.Down))
+                Choice = new int[,] { { Choice[0, 0], ++Choice[0, 1] } };
+            if (e.Code == (Keyboard.Key.Enter))
             {
-                ;
+                int cellID = Cell.cells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1]));
+                if (Cell.livingCells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1])) == -1)
+                {
+                    Cell.cells[cellID].Alive++;
+                    Cell.livingCells.Add(Cell.cells[cellID]);
+                }
+                else
+                {
+                    Cell.cells[cellID].Alive--;
+                    Cell.livingCells.Remove(Cell.cells[cellID]);
+                }
             }
+            if (e.Code == (Keyboard.Key.Space))
+            {
+                //ReadMap();
+                _resumed = !_resumed;
+            }
+
         }
     }
     public class ChoiceMenu : Program
@@ -417,51 +423,60 @@ namespace GameOfLife
             set
             {
                 if (value >= choices.Length) value = 0;
-                if (value < 0) value = choices.Length;
+                if (value < 0) value = choices.Length - 1;
                 choice = value;
             }
         }
         public static void Init()
         {
-            
+            instance.font = new Font("fonts/arial.ttf");
         }
-        public override async Task Update()
+        public override void Update()
         {
             Init();
             while(true)
             {
-                if (pressedKey == ConsoleKey.UpArrow)
-                    Choice--;
-                if (pressedKey == ConsoleKey.DownArrow)
-                    Choice++;
-                if (pressedKey == ConsoleKey.Enter)
+                window.DispatchEvents();
+                if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
                 {
                     instance = scenes[Choice];
                     break;
                 }
-                await Draw();
-                await Task.Delay(100);
+                Draw();
             }
             instance.Update();
         }
-        private async Task Draw()
+        private void Draw()
         {
-            await Task.Run(() =>
+            window.Clear();
+            for (int i = 0; i < choices.Length; i++)
             {
-                Console.Clear();
-                for (int i = 0; i < choices.Length; i++)
+                RectangleShape button = new RectangleShape(new Vector2f(200f, 40f))
                 {
-                    if (i == Choice)
-                    {
-                        Console.BackgroundColor = ConsoleColor.Green;
-                        Console.ForegroundColor = ConsoleColor.Black;
-                        Console.Write("   ");
-                    }
-                    Console.WriteLine(choices[i]);
-                    Console.BackgroundColor = ConsoleColor.Black;
-                    Console.ForegroundColor = ConsoleColor.Green;
+                    Position = new Vector2f(0, i * 40f / 2)
+                };
+                Text btnText = new Text(choices[i], instance.font)
+                {
+                    CharacterSize = 10,
+                    Position = button.Position,
+                    FillColor = Color.White
+                };
+                if (i == Choice)
+                {
+                    button.FillColor = Color.Green;
+                    btnText.FillColor = Color.Black;
                 }
-            });
+                window.Draw(button); // пометить Cell как Drawable!!!! 
+                window.Draw(btnText);
+            }
+            window.Display();
+        }
+        public override void OnKeyPressed(KeyEventArgs e)
+        {
+            if (e.Code == (Keyboard.Key.Up))
+                Choice--;
+            if (e.Code == (Keyboard.Key.Down))
+                Choice++;
         }
     }
 }

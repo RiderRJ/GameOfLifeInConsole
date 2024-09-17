@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>SFML.System</id>
+    <version>2.6.0</version>
+    <title>SFML.Net System</title>
+    <authors>Laurent Gomila</authors>
+    <license type="expression">Zlib</license>
+    <licenseUrl>https://licenses.nuget.org/Zlib</licenseUrl>
+    <icon>sfml-icon.png</icon>
+    <readme>README.md</readme>
+    <projectUrl>https://www.sfml-dev.org/</projectUrl>
+    <description>System module of the SFML.Net library</description>
+    <copyright>Copyright © Laurent Gomila</copyright>
+    <tags>sfml sfml.net</tags>
+    <repository type="git" url="https://github.com/SFML/SFML.Net" commit="bb4d22035b818cc69cb6d2354a44cc9e41270749" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0">
+        <dependency id="CSFML" version="[2.6.1, 2.7.0)" exclude="Build,Analyzers" />
+      </group>
+    </dependencies>
+  </metadata>
+</package>

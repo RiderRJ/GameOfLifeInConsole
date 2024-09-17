@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>CSFML</id>
+    <version>2.6.1</version>
+    <title>CSFML</title>
+    <authors>Laurent Gomila</authors>
+    <license type="expression">Zlib</license>
+    <licenseUrl>https://licenses.nuget.org/Zlib</licenseUrl>
+    <icon>sfml-icon.png</icon>
+    <projectUrl>https://www.sfml-dev.org/</projectUrl>
+    <iconUrl>https://www.sfml-dev.org/images/sfml-icon.png</iconUrl>
+    <description>This package contains the native libraries for the C port of SFML, used as a dependency for SFML.Net</description>
+    <copyright>Copyright © Laurent Gomila</copyright>
+    <tags>sfml csfml</tags>
+    <repository type="git" url="https://github.com/SFML/CSFML" commit="e153a8a4ce524ceeead1c84a24291b29f8c43b0b" />
+    <dependencies>
+      <group targetFramework=".NETStandard2.0" />
+    </dependencies>
+  </metadata>
+</package>

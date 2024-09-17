@@ -12,3 +12,12 @@ C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug
 C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CoreCompileInputs.cache
 C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.exe
 C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.pdb
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Audio.dll
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Graphics.dll
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.System.dll
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Window.dll
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Audio.xml
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Graphics.xml
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.System.xml
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\bin\Debug\SFML.Window.xml
+C:\Users\Иван\source\repos\ConsoleGameOfLife\GameOfLife\GameOfLife\obj\Debug\GameOfLife.csproj.CopyComplete
