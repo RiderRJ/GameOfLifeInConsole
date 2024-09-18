@@ -66,9 +66,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="KeyCatcher.cs" />
+    <Compile Include="Cell.cs" />
+    <Compile Include="ChoiceMenu.cs" />
+    <Compile Include="GameField.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RandomField.cs" />
+    <Compile Include="RuleConstructor.cs" />
+    <Compile Include="Sandbox.cs" />
+    <Compile Include="Thinker.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">
