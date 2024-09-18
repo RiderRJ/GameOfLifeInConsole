@@ -4,14 +4,14 @@ using SFML.Window;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static GameOfLife.Cell;
 
 namespace GameOfLife
 {
     public abstract class GameField : Program
     {
-        protected static Random rnd = new Random();
-        protected static short height = 100;
-        protected static short width = 100;
+        protected static short height = 200;
+        protected static short width = 200;
         public static char[,] Map { get; protected set; } = new char[width, height];
         protected int[,] choice = new[,]
         {
@@ -31,19 +31,18 @@ namespace GameOfLife
         }
         protected bool _resumed = true;
         protected RectangleShape[,] screenDot = new RectangleShape[width,height];
+        RuleConstructor Rules { get; set; }
         public GameField()
         {
             for(int i = 0; i < screenDot.GetLength(0); i++)
-            {
                 for (int j = 0; j < screenDot.GetLength(1); j++)
                     screenDot[i, j] = new RectangleShape();
-            }
         }
         public void CellsLife()
         {
             if (_resumed)
             {
-                Cell.nMLivingCells = Cell.livingCells.ToList();
+                nMLivingCells = livingCells.ToList();
                 foreach (var cell in Thinker.thinkers)
                     cell.Think();
                 foreach (var cell in Thinker.thinkers)
@@ -53,22 +52,23 @@ namespace GameOfLife
         }
         public override void Init()
         {
-            Cell.rule = delegate (short neighbours, short alive, Cell itself)
+            rule = delegate (short neighbours, short alive, Cell itself)
             {
                 if (alive == 1)
                     if (neighbours < 2 || neighbours > 3)
                     {
-                        Cell.nMLivingCells.Remove(itself);
+                        //nMLivingCells.Remove(itself);
                         return 0;
                     }
                 if (alive == 0)
                     if (neighbours == 3)
                     {
-                        Cell.nMLivingCells.Add(itself);
+                        //nMLivingCells.Add(itself);
                         return 1;
                     }
                 return alive;
             };
+            CreateCellField(width, height);
         }
         protected static void ReadMap()
         {
@@ -80,16 +80,15 @@ namespace GameOfLife
                     else
                         new Cell(i, k, 0);
                 }
-            //foreach (var cell in Cell.cells)
-            //    cell.Ready();
+            //foreach (var cell in cells)
+            //    Ready();
         }
         protected static void UpdateMap()
         {
             for (short i = 0; i < Map.GetLength(0); i++)
                 for (short k = 0; k < Map.GetLength(1); k++)
                 {
-                    List<Cell> aliveCells = Cell.livingCells;
-                    if (aliveCells.FindIndex(c => c == new Cell(i, k)) != -1)
+                    if (cells[i][k].Alive == 1)
                         Map[i, k] = '#';
                     else Map[i, k] = '-';
                 }
@@ -105,7 +104,7 @@ namespace GameOfLife
                     screenDot[i, j].FillColor = new Color(25, 25, 25);
                     screenDot[i, j].Position = new Vector2f(i * cWidth / 2, j * cHeight / 2);
                     screenDot[i,j].Size = new Vector2f(cWidth, cHeight);
-                    if (Cell.livingCells.FindIndex(c => c == new Cell(i, j)) != -1)
+                    if (cells[i][j].Alive == 1)
                         screenDot[i,j].FillColor = Color.White;
                     if (!_resumed)
                     {
@@ -130,17 +129,8 @@ namespace GameOfLife
                 Choice = new int[,] { { Choice[0, 0], ++Choice[0, 1] } };
             if (e.Code == (Keyboard.Key.Enter))
             {
-                int cellID = Cell.cells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1]));
-                if (Cell.livingCells.FindIndex(cell => cell == new Cell((short)Choice[0, 0], (short)Choice[0, 1])) == -1)
-                {
-                    Cell.cells[cellID].Alive++;
-                    Cell.livingCells.Add(Cell.cells[cellID]);
-                }
-                else
-                {
-                    Cell.cells[cellID].Alive--;
-                    Cell.livingCells.Remove(Cell.cells[cellID]);
-                }
+                Cell cellRef = cells[Choice[0, 0]][Choice[0, 1]];
+                cellRef.Alive = cellRef.Alive == 1 ? (short)0 : (short)1;
             }
             if (e.Code == (Keyboard.Key.Space))
             {

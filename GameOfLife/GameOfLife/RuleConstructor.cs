@@ -7,8 +7,8 @@ namespace GameOfLife
     {
         private List<Tuple<short, char>> deadArgs;
         private List<Tuple<short, char>> liveArgs;
-        private List<int> neighsArgs;
-        private List<Cell[]> neightWMaskArgs;
+        private int neighsArgs;
+        private Cell[] neightWMaskArgs;
         //меню с выбором сверху
         //снизу список с выбранным и деталями.
         //функционал меню выбора:

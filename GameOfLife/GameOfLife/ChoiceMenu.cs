@@ -6,8 +6,8 @@ namespace GameOfLife
 {
     public class ChoiceMenu : Program
     {
-        string[] choices = { "Рандомная генерация поля", "Режим песочницы" };
-        Program[] scenes = new Program[] { new RandomField(), new Sandbox()};
+        string[] choices = { "Рандомная генерация поля", "Режим песочницы" , "Кастомный режим"};
+        Program[] scenes = new Program[] { new RandomField(), new Sandbox(), new CustomGameMenu()};
         private int choice = 1;
         private int Choice
         {

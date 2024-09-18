@@ -66,8 +66,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApplicationHolder.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="ChoiceMenu.cs" />
+    <Compile Include="CustomGameMenu.cs" />
+    <Compile Include="ExceptionMenu.cs" />
     <Compile Include="GameField.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -75,6 +78,7 @@
     <Compile Include="RuleConstructor.cs" />
     <Compile Include="Sandbox.cs" />
     <Compile Include="Thinker.cs" />
+    <Compile Include="Window.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">
