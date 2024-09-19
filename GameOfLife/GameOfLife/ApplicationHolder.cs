@@ -7,5 +7,6 @@ namespace GameOfLife
     {
         public static Random rnd = new Random();
         public static Font font = new Font("fonts/arial.ttf");
+        public static Controller gameController = new Controller();
     }
 }

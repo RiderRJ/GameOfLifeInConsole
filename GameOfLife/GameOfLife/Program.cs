@@ -15,7 +15,6 @@ namespace GameOfLife
         protected static int Fps { get; private set; } = 0;
         public static void Main(string[] args)
         {
-            font = new Font("fonts/arial.ttf");
             CreateWindow();
             Text fps = new Text("", font)
             {
@@ -62,6 +61,7 @@ namespace GameOfLife
             window.KeyPressed += (sender, e) =>
             {
                 if (e.Code == Keyboard.Key.Escape) { window.Close(); Environment.Exit(0); };
+                gameController.Controll(e);
                 instance.OnKeyPressed(e);
             };
         }

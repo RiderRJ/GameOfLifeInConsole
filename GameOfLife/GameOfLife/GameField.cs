@@ -8,25 +8,9 @@ namespace GameOfLife
 {
     public abstract class GameField : Program
     {
-        protected static short height = 50;
-        protected static short width = 50;
+        protected static short height = 20;
+        protected static short width = 20;
         public static char[,] Map { get; protected set; } = new char[width, height];
-        protected int[,] choice = new[,]
-        {
-            { width/2, height/2 },
-        };
-        protected int[,] Choice
-        {
-            get => choice;
-            set
-            {
-                if (value[0, 0] >= Map.GetLength(0)) value[0, 0] = 0;
-                if (value[0, 0] < 0) value[0, 0] = Map.GetLength(0);
-                if (value[0, 1] >= Map.GetLength(1)) value[0, 1] = 0;
-                if (value[0, 1] < 0) value[0, 1] = Map.GetLength(1);
-                choice = value;
-            }
-        }
         protected bool _resumed = true;
         protected RectangleShape[,] screenDot = new RectangleShape[width,height];
         protected Text[,] debugNum = new Text[width,height];
@@ -70,6 +54,8 @@ namespace GameOfLife
                     }
                 return alive;
             };
+            gameController.X = (ushort)width;
+            gameController.Y = (ushort)height;
             CreateCellField(width, height);
         }
         protected static void ReadMap()
@@ -114,7 +100,7 @@ namespace GameOfLife
                         screenDot[i,j].FillColor = Color.White;
                     if (!_resumed)
                     {
-                        if (Choice[0, 0] == i && Choice[0, 1] == j)
+                        if (gameController.Choice[0, 0] == i && gameController.Choice[0, 1] == j)
                         {
                             screenDot[i,j].FillColor = Color.Green;
                         }
@@ -125,17 +111,17 @@ namespace GameOfLife
         }
         public override void OnKeyPressed(KeyEventArgs e)
         {
-            if (e.Code == (Keyboard.Key.Left))
-                Choice = new int[,] { { --Choice[0, 0], Choice[0, 1] } };
-            if (e.Code == (Keyboard.Key.Right))
-                Choice = new int[,] { { ++Choice[0, 0], Choice[0, 1] } };
-            if (e.Code == (Keyboard.Key.Up))
-                Choice = new int[,] { { Choice[0, 0], --Choice[0, 1] } };
-            if (e.Code == (Keyboard.Key.Down))
-                Choice = new int[,] { { Choice[0, 0], ++Choice[0, 1] } };
+            //if (e.Code == (Keyboard.Key.Left))
+            //    Choice = new int[,] { { --Choice[0, 0], Choice[0, 1] } };
+            //if (e.Code == (Keyboard.Key.Right))
+            //    Choice = new int[,] { { ++Choice[0, 0], Choice[0, 1] } };
+            //if (e.Code == (Keyboard.Key.Up))
+            //    Choice = new int[,] { { Choice[0, 0], --Choice[0, 1] } };
+            //if (e.Code == (Keyboard.Key.Down))
+            //    Choice = new int[,] { { Choice[0, 0], ++Choice[0, 1] } };
             if (e.Code == (Keyboard.Key.Enter))
             {
-                Cell cellRef = cells[Choice[0, 0]][Choice[0, 1]];
+                Cell cellRef = cells[gameController.Choice[0, 0]][gameController.Choice[0, 1]];
                 cellRef.Alive = cellRef.Alive == 1 ? (short)0 : (short)1;
             }
             if (e.Code == (Keyboard.Key.Space))

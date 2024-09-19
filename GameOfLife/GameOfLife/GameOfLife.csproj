@@ -69,6 +69,7 @@
     <Compile Include="ApplicationHolder.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="ChoiceMenu.cs" />
+    <Compile Include="Controller.cs" />
     <Compile Include="CustomGameMenu.cs" />
     <Compile Include="ExceptionMenu.cs" />
     <Compile Include="GameField.cs" />

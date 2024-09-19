@@ -1,6 +1,7 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
+using System.Security.Principal;
 
 namespace GameOfLife
 {
@@ -8,24 +9,13 @@ namespace GameOfLife
     {
         string[] choices = { "Рандомная генерация поля", "Режим песочницы" , "Кастомный режим"};
         Program[] scenes = new Program[] { new RandomField(35), new Sandbox(), new CustomGameMenu()};
-        private int choice = 1;
-        private int Choice
-        {
-            get => choice;
-            set
-            {
-                if (value >= choices.Length) value = 0;
-                if (value < 0) value = choices.Length - 1;
-                choice = value;
-            }
-        }
         public override void Init()
         {
-
+            gameController.X = 0;
+            gameController.Y = (ushort)choices.Length;
         }
         public override void Update()
         {
-            Init();
             Draw();
         }
         private void Draw()
@@ -43,24 +33,20 @@ namespace GameOfLife
                     Position = button.Position,
                     FillColor = Color.White
                 };
-                if (i == Choice)
+                if (i == gameController.Choice[0,1])
                 {
                     button.FillColor = Color.Green;
                     btnText.FillColor = Color.Black;
                 }
-                window.Draw(button); // пометить Cell как Drawable!!!! 
+                window.Draw(button); // пометить Cell как Drawable??? 
                 window.Draw(btnText);
             }
         }
         public override void OnKeyPressed(KeyEventArgs e)
         {
-            if (e.Code == (Keyboard.Key.Up))
-                Choice--;
-            if (e.Code == (Keyboard.Key.Down))
-                Choice++;
             if (Keyboard.IsKeyPressed(Keyboard.Key.Enter))
             {
-                instance = scenes[Choice];
+                instance = scenes[gameController.Choice[0,1]];
                 leave = true;
             }
         }
