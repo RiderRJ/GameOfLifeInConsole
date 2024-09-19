@@ -2,7 +2,13 @@
 {
     public sealed class RandomField : GameField
     {
-        private static void CreateMap()
+        private int chance;
+        public RandomField(int chance = 0)
+        {
+            this.chance = chance;
+        }
+
+        private void CreateMap()
         {
             for (int i = 0; i < width; i++)
                 for (int k = 0; k < height; k++)
@@ -12,7 +18,7 @@
             for (int i = 0; i < Map.GetLength(0); i++)
                 for (int k = 0; k < Map.GetLength(1); k++)
                 {
-                    if (rnd.Next(0, 99) < 35)
+                    if (rnd.Next(0, 99) < chance)
                         Map[i, k] = '#';
                 }
         }

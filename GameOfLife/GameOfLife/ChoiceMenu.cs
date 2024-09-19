@@ -4,10 +4,10 @@ using SFML.Window;
 
 namespace GameOfLife
 {
-    public class ChoiceMenu : Program
+    public sealed class ChoiceMenu : Program
     {
         string[] choices = { "Рандомная генерация поля", "Режим песочницы" , "Кастомный режим"};
-        Program[] scenes = new Program[] { new RandomField(), new Sandbox(), new CustomGameMenu()};
+        Program[] scenes = new Program[] { new RandomField(35), new Sandbox(), new CustomGameMenu()};
         private int choice = 1;
         private int Choice
         {

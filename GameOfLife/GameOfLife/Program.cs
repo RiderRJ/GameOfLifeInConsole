@@ -43,6 +43,14 @@ namespace GameOfLife
                 instance.Update();
                 Frames++;
                 fps.DisplayedString = Fps.ToString();
+                #region Отслеживание потока памяти
+                //using (Stream stream = new MemoryStream())
+                //{
+                //    IFormatter formatter = new BinaryFormatter();
+                //    formatter.Serialize(stream, Cell.cells);
+                //    Console.WriteLine((float)stream.Length/1024/1024);
+                //}
+                #endregion
                 window.Draw(fps);
                 window.Display();
             }

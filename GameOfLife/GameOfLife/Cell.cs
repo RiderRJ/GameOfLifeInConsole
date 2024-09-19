@@ -106,22 +106,21 @@ namespace GameOfLife
         public override void Think()
         {
             neighbours = 0;
-            foreach (var row in cells)
-                foreach (var cell in row)
+            int maxDelta = 1;
+            int xMin = Math.Max(0, x - maxDelta);
+            int xMax = Math.Min(cells.Count - 1, x + maxDelta);
+            int yMin = Math.Max(0, y - maxDelta);
+            int yMax = Math.Min(cells.First().Count - 1, y + maxDelta);
+            for (int x = xMin; x <= xMax; x++)
+            {
+                for (int y = yMin; y <= yMax; y++)
                 {
-                    //Код для поиска соседей
-                    for(int i = 0; i < 3; i++)
-                    {
-                        for (int k = 0; k < 3; k++)
-                            ;
-                    }
-
-                    //if (cell == this) continue;
-                    //Cell delta = cell - this;
-                    //if (Math.Abs(delta.x) > 1 || Math.Abs(delta.y) > 1)//Заменить подсчет на то, чтобы кажда живая клетка прибавляла к числу соседей соседних клеток 1 -> мб так будет быстрее
-                    //    continue;
-                    neighbours++;
-                } //Подсчет живых соседей
+                    if (x == this.x && y == this.y)
+                        continue;
+                    if (cells[x][y].Alive == 1)
+                        neighbours++;
+                }
+            }
             nextMoveAlive = rule(neighbours, Alive, this);
         }
         public override void NextTurn()
@@ -138,6 +137,7 @@ namespace GameOfLife
         }
         public static void CreateCellField(short x, short y)
         {
+            cells.Clear();
             for (short i = 0; i < x; i++)
             {
                 List<Cell> cells = new List<Cell>();

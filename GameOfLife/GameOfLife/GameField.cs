@@ -1,8 +1,6 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System;
-using System.Collections.Generic;
 using System.Linq;
 using static GameOfLife.Cell;
 
@@ -10,12 +8,12 @@ namespace GameOfLife
 {
     public abstract class GameField : Program
     {
-        protected static short height = 200;
-        protected static short width = 200;
+        protected static short height = 50;
+        protected static short width = 50;
         public static char[,] Map { get; protected set; } = new char[width, height];
         protected int[,] choice = new[,]
         {
-            { 0, 0 },
+            { width/2, height/2 },
         };
         protected int[,] Choice
         {
@@ -31,12 +29,16 @@ namespace GameOfLife
         }
         protected bool _resumed = true;
         protected RectangleShape[,] screenDot = new RectangleShape[width,height];
-        RuleConstructor Rules { get; set; }
+        protected Text[,] debugNum = new Text[width,height];
+        RuleConstructor Rules { get; set; } //
         public GameField()
         {
             for(int i = 0; i < screenDot.GetLength(0); i++)
                 for (int j = 0; j < screenDot.GetLength(1); j++)
+                {
                     screenDot[i, j] = new RectangleShape();
+                    debugNum[i, j] = new Text();
+                }
         }
         public void CellsLife()
         {
@@ -76,9 +78,11 @@ namespace GameOfLife
                 for (short k = 0; k < Map.GetLength(1); k++)
                 {
                     if (Map[i, k] == '#')
-                        new Cell(i, k, 1);
+                        cells[i][k].Alive = 1;
+                    //new Cell(i, k, 1);
                     else
-                        new Cell(i, k, 0);
+                        cells[i][k].Alive = 0;
+                        //new Cell(i, k, 0);
                 }
             //foreach (var cell in cells)
             //    Ready();
@@ -102,6 +106,8 @@ namespace GameOfLife
                     float cWidth = window.Size.X * (1f / Map.GetLength(0)) * 1.25f;
                     float cHeight = window.Size.Y * (1f / Map.GetLength(1)) * 1.75f;
                     screenDot[i, j].FillColor = new Color(25, 25, 25);
+                    screenDot[i, j].OutlineColor = new Color(120, 120, 120);
+                    screenDot[i, j].OutlineThickness = 1;
                     screenDot[i, j].Position = new Vector2f(i * cWidth / 2, j * cHeight / 2);
                     screenDot[i,j].Size = new Vector2f(cWidth, cHeight);
                     if (cells[i][j].Alive == 1)
