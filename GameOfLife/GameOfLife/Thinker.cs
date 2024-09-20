@@ -7,10 +7,11 @@ namespace GameOfLife
     public abstract class Thinker
     {
         public static List<Thinker> thinkers = new List<Thinker>();
-        public abstract void Ready();
+        public Thinker()
+        {
+            thinkers.Add(this);
+        }
         public abstract void Think();
         public abstract void NextTurn();
-
     }
-
 }

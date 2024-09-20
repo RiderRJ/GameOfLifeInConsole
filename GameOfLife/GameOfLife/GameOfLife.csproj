@@ -67,6 +67,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApplicationHolder.cs" />
+    <Compile Include="Button.cs" />
     <Compile Include="Cell.cs" />
     <Compile Include="ChoiceMenu.cs" />
     <Compile Include="Controller.cs" />

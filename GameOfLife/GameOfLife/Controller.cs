@@ -1,15 +1,11 @@
 ﻿using SFML.Window;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GameOfLife
 {
     public sealed class Controller
     {
         private static ushort xLim;
+        private static ushort yLim;
         public ushort X
         {
             get => xLim; set { xLim = value; Choice[0, 0] = (ushort)(value / 2); }
@@ -19,7 +15,6 @@ namespace GameOfLife
             get => yLim;
             set { yLim = value; Choice[0, 1] = (ushort)(value / 2); }
         }
-        private static ushort yLim;
         private ushort[,] choice = new ushort[,]
         {
             { (ushort)(xLim/2), (ushort)(yLim/2) },

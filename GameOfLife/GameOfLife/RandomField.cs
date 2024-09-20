@@ -7,7 +7,6 @@
         {
             this.chance = chance;
         }
-
         private void CreateMap()
         {
             for (int i = 0; i < width; i++)

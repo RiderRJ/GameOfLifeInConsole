@@ -13,22 +13,15 @@ namespace GameOfLife
     public delegate void NeighbourCheck(Cell itself, int maxDelta);//поиск соседей по расстоянию
     #endregion
 
-    public delegate void CellAction(Cell sender);//для сообщения соседям об оживлении или омертвлении клетки
+    public delegate void CellAction(Cell sender, short? forcedIncrement = null);//для сообщения соседям об оживлении или омертвлении клетки
 
     [Serializable]
     public sealed class Cell : Thinker
     {
-        //превратить в список списков, чтобы при рождении и смерти клетки, было проще добавлять или удалять соседям neighbours
         //найти способ уменьшить потребление
-        //public static List<Cell> cells = new List<Cell>();
-        //public static List<Cell> nMLivingCells = new List<Cell>();
-        //public static List<Cell> livingCells = new List<Cell>();   
         public static List<List<Cell>> cells = new List<List<Cell>>();
-        public static List<List<Cell>> nMLivingCells = new List<List<Cell>>();
-        public static List<List<Cell>> livingCells = new List<List<Cell>>();
         public static Rule rule;
-        public CellAction onBirth;
-        public CellAction onDeath;
+        public CellAction onChangeState;
         private short x, y;
         public short neighbours;
         private short alive;
@@ -47,93 +40,45 @@ namespace GameOfLife
         public short NextMoveAlive
         {
             get => nextMoveAlive;
-            private set
+            set
             {
                 nextMoveAlive = value;
             }
         }
-        #region Constructors
         public Cell(short x, short y, short alive)
         {
-            onBirth += OnBirth;
-            onDeath += OnDeath;
+            onChangeState += OnChangeState;
             this.x = x; this.y = y;
             Alive = alive;
-            //if (Alive == 1)
-            //{
-            //    livingCells[x][y] = this;
-            //}
-            //cells[x][y] = this;
-            thinkers.Add(this);
-        }
-        public Cell(short x, short y)
-        {
-            this.x = x; this.y = y;
-            Alive = 0;
-        }
-
-        #endregion
-        #region Operators
-        public static Cell operator +(Cell a, Cell b)
-        {
-            return new Cell((short)(a.x + b.x), (short)(a.y + b.y));
-        }
-        public static Cell operator -(Cell a, Cell b)
-        {
-            return new Cell((short)(a.x - b.x), (short)(a.y - b.y));
-        }
-        public static bool operator ==(Cell a, Cell b)
-        {
-            return a.x == b.x && a.y == b.y;
-        }
-        public static bool operator !=(Cell a, Cell b)
-        {
-            return a.x != b.x || a.y != b.y;
-        }
-
-        #endregion
-        /// <summary>
-        /// Сообщает системе, что готова к следующему ходу.
-        /// </summary>
-        public override void Ready()
-        {
-            if (cells[x][y].Alive == 1)
-                onBirth?.Invoke(this);
         }
         /// <summary>
         /// Принимают решение на следующий ход
         /// </summary>
         public override void Think()
         {
-            neighbours = 0;
-            int maxDelta = 1;
-            int xMin = Math.Max(0, x - maxDelta);
-            int xMax = Math.Min(cells.Count - 1, x + maxDelta);
-            int yMin = Math.Max(0, y - maxDelta);
-            int yMax = Math.Min(cells.First().Count - 1, y + maxDelta);
-            for (int x = xMin; x <= xMax; x++)
-            {
-                for (int y = yMin; y <= yMax; y++)
-                {
-                    if (x == this.x && y == this.y)
-                        continue;
-                    if (cells[x][y].Alive == 1)
-                        neighbours++;
-                }
-            }
+            //neighbours = 0;
+            //int maxDelta = 1;
+            //int xMin = Math.Max(0, x - maxDelta);
+            //int xMax = Math.Min(cells.Count - 1, x + maxDelta);
+            //int yMin = Math.Max(0, y - maxDelta);
+            //int yMax = Math.Min(cells.First().Count - 1, y + maxDelta);
+            //for (int x = xMin; x <= xMax; x++)
+            //{
+            //    for (int y = yMin; y <= yMax; y++)
+            //    {
+            //        if (x == this.x && y == this.y)
+            //            continue;
+            //        if (cells[x][y].Alive == 1)
+            //            neighbours++;
+            //    }
+            //}
             nextMoveAlive = rule(neighbours, Alive, this);
         }
         public override void NextTurn()
         {
             if (Alive != nextMoveAlive)
-            {
-                //if (nextMoveAlive == 1)
-                //    onBirth?.Invoke(this);
-                //if (nextMoveAlive == 0)
-                //    onDeath?.Invoke(this);
-            }
+                onChangeState(this);
             Alive = nextMoveAlive;
-            //livingCells = nMLivingCells;
         }
         public static void CreateCellField(short x, short y)
         {
@@ -148,37 +93,22 @@ namespace GameOfLife
                 Cell.cells.Add(cells);
             }
         }
-        private void OnBirth(Cell sender)
+        private void OnChangeState(Cell sender, short? forcedIncrement = null)
         {
-            //добавить соседей
-            //int footer = cells.FindIndex(cell => cell == new Cell((short)(sender.x - 1), sender.y));//
-            //int upper = cells.FindIndex(cell => cell == new Cell((short)(sender.x + 1), sender.y));
-            //int right = cells.FindIndex(cell => cell == new Cell(sender.x, (short)(sender.y + 1)));
-            //int left = cells.FindIndex(cell => cell == new Cell(sender.x, (short)(sender.y - 1)));//
-            //if (right != -1 && right + 1 < cells.Count)
-            //    cells[right].neighbours++;
-            //if (left != -1 && left - 1 > 0)
-            //    cells[left].neighbours++;
-            //if (upper != -1)
-            //    cells[upper].neighbours++;
-            //if (footer != -1 && footer < cells.Count)
-            //    cells[footer].neighbours++;
-        }
-        private void OnDeath(Cell sender)
-        {
-            //удалить соседей
-            //int footer = cells.FindIndex(cell => cell == new Cell((short)(sender.x - 1), sender.y));//
-            //int upper = cells.FindIndex(cell => cell == new Cell((short)(sender.x + 1), sender.y));
-            //int right = cells.FindIndex(cell => cell == new Cell(sender.x, (short)(sender.y + 1)));
-            //int left = cells.FindIndex(cell => cell == new Cell(sender.x, (short)(sender.y - 1)));//
-            //if (right != -1 && right + 1 < cells.Count)
-            //    cells[right].neighbours--;
-            //if (left != -1 && left - 1 > 0)
-            //    cells[left].neighbours--;
-            //if (upper != -1)
-            //    cells[upper].neighbours--;
-            //if (footer != -1 && footer < cells.Count)
-            //    cells[footer].neighbours--;
+            int maxDelta = 1;
+            int xMin = Math.Max(0, x - maxDelta);
+            int xMax = Math.Min(cells.Count - 1, x + maxDelta);
+            int yMin = Math.Max(0, y - maxDelta);
+            int yMax = Math.Min(cells.First().Count - 1, y + maxDelta);
+            for (int x = xMin; x <= xMax; x++)
+            {
+                for (int y = yMin; y <= yMax; y++)
+                {
+                    if (x == this.x && y == this.y)
+                        continue;
+                    cells[x][y].neighbours += forcedIncrement ?? ((sender.nextMoveAlive == 1) ? (short)1 : (short)-1);
+                }
+            }
         }
         public override string ToString()
         {
