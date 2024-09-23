@@ -81,22 +81,20 @@ namespace GameOfLife
             float buttonWidth = 80f;
             for (int i = 0; i < (m_Type == WindowType.Message ? 1 : 2); i++)
             {
-                btnContents.Add(new Text(m_Type == WindowType.Message ? m_OkBtnVariants[ApplicationHolder.rnd
-                    .Next(0, m_OkBtnVariants.Length)] : (i == 0 ? "Yes" : "No"), ApplicationHolder.font)
-                {
-                    CharacterSize = 12
-                });
                 float buttonPosX = window.Position.X + padding + i * (buttonWidth + buttonSpacing);
                 float buttonPosY = window.Position.Y + windowSize.Y - buttonHeight - padding;
                 btns.Add(Button.CreateButton(new RectangleShape(new Vector2f(buttonWidth, buttonHeight))
                 {
                     Position = new Vector2f(buttonPosX, buttonPosY),
                     FillColor = new Color(105, 105, 105),
-                }));
-                btnContents.Last().Position = btns.Last().Position + new Vector2f(
-                    (buttonWidth - btnContents.Last().GetLocalBounds().Width) / 2,
-                    (buttonHeight - btnContents.Last().CharacterSize) / 2
+                },null,
+                m_Type == WindowType.Message ? m_OkBtnVariants[ApplicationHolder.rnd
+                    .Next(0, m_OkBtnVariants.Length)] : (i == 0 ? "Yes" : "No")));
+                btns.Last().btnText.Position = btns.Last().Position + new Vector2f(
+                    (buttonWidth - btns.Last().btnText.GetLocalBounds().Width) / 2,
+                    (buttonHeight - btns.Last().btnText.CharacterSize) / 2
                 );
+                btns.Last().btnText.CharacterSize = 12;
             }
         }
         private void DrawWindow()
@@ -104,17 +102,13 @@ namespace GameOfLife
             Program.window.DispatchEvents();
             Program.window.Clear(new Color(25, 25, 25));
             btns[global_Controller.Choice[0, 1]].FillColor = new Color(55, 255, 55);
-            btnContents[global_Controller.Choice[0, 1]].FillColor = new Color(55, 55, 55);
+            btns[global_Controller.Choice[0, 1]].btnText.FillColor = new Color(55, 55, 55);
             Program.window.Draw(window);
             Program.window.Draw(title);
             Program.window.Draw(content);
             btns.ForEach(btn =>
             {
-                Program.window.Draw(btn);
-            });
-            btnContents.ForEach(cont =>
-            {
-                Program.window.Draw(cont);
+                Program.window.Draw(btn as IExtentedDrawable);
             });
             Program.window.Display();
         }
