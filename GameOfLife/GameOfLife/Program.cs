@@ -8,8 +8,8 @@ namespace GameOfLife
 {
     public abstract class Program : ApplicationHolder
     {
-        protected static Program instance = new ChoiceMenu();
         public static RenderWindow window;
+        protected static Program instance = new ChoiceMenu();
         protected static bool leave = false;
         protected static int Frames { get; private set; } = 0;
         protected static int Fps { get; private set; } = 0;

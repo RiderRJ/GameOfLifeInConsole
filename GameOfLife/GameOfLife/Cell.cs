@@ -22,28 +22,19 @@ namespace GameOfLife
         public static List<List<Cell>> cells = new List<List<Cell>>();
         public static Rule rule;
         public CellAction onChangeState;
-        private short x, y;
+        private readonly short x, y;
         public short neighbours;
         private short alive;
         public short Alive //переделать
         {
-            get
-            {
-                return alive;
-            }
-            set
-            {
-                alive = value;
-            }
+            get => alive;
+            set => alive = value;
         }
         private short nextMoveAlive;
         public short NextMoveAlive
         {
             get => nextMoveAlive;
-            set
-            {
-                nextMoveAlive = value;
-            }
+            set => nextMoveAlive = value;
         }
         public Cell(short x, short y, short alive)
         {
@@ -56,22 +47,6 @@ namespace GameOfLife
         /// </summary>
         public override void Think()
         {
-            //neighbours = 0;
-            //int maxDelta = 1;
-            //int xMin = Math.Max(0, x - maxDelta);
-            //int xMax = Math.Min(cells.Count - 1, x + maxDelta);
-            //int yMin = Math.Max(0, y - maxDelta);
-            //int yMax = Math.Min(cells.First().Count - 1, y + maxDelta);
-            //for (int x = xMin; x <= xMax; x++)
-            //{
-            //    for (int y = yMin; y <= yMax; y++)
-            //    {
-            //        if (x == this.x && y == this.y)
-            //            continue;
-            //        if (cells[x][y].Alive == 1)
-            //            neighbours++;
-            //    }
-            //}
             nextMoveAlive = rule(neighbours, Alive, this);
         }
         public override void NextTurn()
@@ -109,27 +84,6 @@ namespace GameOfLife
                     cells[x][y].neighbours += forcedIncrement ?? ((sender.nextMoveAlive == 1) ? (short)1 : (short)-1);
                 }
             }
-        }
-        public override string ToString()
-        {
-            return $"Cell x= {x} y= {y}";
-        }
-        public override bool Equals(object obj)
-        {
-            return obj is Cell cell &&
-                   obj != null &&
-                   x == cell.x &&
-                   y == cell.y &&
-                   alive == cell.alive;
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = 1921429393;
-            hashCode = hashCode * -1521134295 + x.GetHashCode();
-            hashCode = hashCode * -1521134295 + y.GetHashCode();
-            hashCode = hashCode * -1521134295 + alive.GetHashCode();
-            return hashCode;
         }
     }
 }

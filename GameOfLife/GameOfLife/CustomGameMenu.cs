@@ -3,21 +3,13 @@ using System;
 
 namespace GameOfLife
 {
-    public class CustomGameMenu : Program
+    public class CustomGameMenu : Program //Мне не нравится что этот класс лишь чуть-чуть отличается от choice menu.
     {
-        string[] choices = { };
+        string[] choices = { 
+            "Максимальное расстояние до соседей", "Маска приема соседей", "Правило для мертвых клеток", 
+            "Правило для живых клеток", "Процент заполняемости поля"
+        };
         object[] links = new object[] { };
-        private int choice = 1;
-        private int Choice
-        {
-            get => choice;
-            set
-            {
-                if (value >= choices.Length) value = 0;
-                if (value < 0) value = choices.Length - 1;
-                choice = value;
-            }
-        }
         public override void Init()
         {
             ExceptionMenu.Throw(new NotImplementedException());

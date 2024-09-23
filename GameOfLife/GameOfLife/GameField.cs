@@ -2,28 +2,20 @@
 using SFML.System;
 using SFML.Window;
 using System.Linq;
+using System.Threading.Tasks;
 using static GameOfLife.Cell;
 
 namespace GameOfLife
 {
     public abstract class GameField : Program
     {
-        protected static short height = 50;
-        protected static short width = 50;
+        protected static short height = 100; //300:300 = 5fps
+        protected static short width = 100;
         public static char[,] Map { get; protected set; } = new char[width, height];
         protected bool _resumed = true;
-        protected RectangleShape[,] screenDot = new RectangleShape[width,height];
-        protected Text[,] debugNum = new Text[width,height];
+        protected RectangleShape screenDot = new RectangleShape();
+        protected Text debugNum = new Text();
         RuleConstructor Rules { get; set; } //
-        public GameField()
-        {
-            for(int i = 0; i < screenDot.GetLength(0); i++)
-                for (int j = 0; j < screenDot.GetLength(1); j++)
-                {
-                    screenDot[i, j] = new RectangleShape();
-                    debugNum[i, j] = new Text();
-                }
-        }
         public void CellsLife()
         {
             if (_resumed)
@@ -33,7 +25,6 @@ namespace GameOfLife
                 foreach (var cell in Thinker.thinkers)
                     cell.NextTurn();
             }
-            UpdateMap();
         }
         public override void Init()
         {
@@ -55,53 +46,24 @@ namespace GameOfLife
             gameController.Y = (ushort)height;
             CreateCellField(width, height);
         }
-        protected static void ReadMap()
-        {
-            for (short i = 0; i < Map.GetLength(0); i++)
-                for (short k = 0; k < Map.GetLength(1); k++)
-                {
-                    if (Map[i, k] == '#')
-                    {
-                        cells[i][k].Alive = 1;
-                        cells[i][k].onChangeState(cells[i][k], 1);
-                    }
-                    else
-                        cells[i][k].Alive = 0;
-                }
-        }
-        protected static void UpdateMap()
-        {
-            for (short i = 0; i < Map.GetLength(0); i++)
-                for (short k = 0; k < Map.GetLength(1); k++)
-                {
-                    if (cells[i][k].Alive == 1)
-                        Map[i, k] = '#';
-                    else Map[i, k] = '-';
-                }
-        }
         protected void Draw()
         {
+            float cWidth = window.Size.X * (1f / Map.GetLength(0)) * 1.25f;
+            float cHeight = window.Size.Y * (1f / Map.GetLength(1)) * 1.75f;
+            screenDot.OutlineColor = new Color(120, 120, 120);
+            screenDot.OutlineThickness = 1f;
             for (short i = 0; i < Map.GetLength(0); i++)
             {
                 for (short j = 0; j < Map.GetLength(1); j++)
                 {
-                    float cWidth = window.Size.X * (1f / Map.GetLength(0)) * 1.25f;
-                    float cHeight = window.Size.Y * (1f / Map.GetLength(1)) * 1.75f;
-                    screenDot[i, j].FillColor = new Color(25, 25, 25);
-                    screenDot[i, j].OutlineColor = new Color(120, 120, 120);
-                    screenDot[i, j].OutlineThickness = 1;
-                    screenDot[i, j].Position = new Vector2f(i * cWidth / 2, j * cHeight / 2);
-                    screenDot[i,j].Size = new Vector2f(cWidth, cHeight);
-                    if (cells[i][j].Alive == 1)
-                        screenDot[i,j].FillColor = Color.White;
-                    if (!_resumed)
+                    screenDot.Position = new Vector2f(i * cWidth / 2, j * cHeight / 2);
+                    screenDot.Size = new Vector2f(cWidth, cHeight);
+                    screenDot.FillColor = cells[i][j].Alive == 1 ? Color.White : new Color(25, 25, 25);
+                    if (!_resumed && gameController.Choice[0, 0] == i && gameController.Choice[0, 1] == j)
                     {
-                        if (gameController.Choice[0, 0] == i && gameController.Choice[0, 1] == j)
-                        {
-                            screenDot[i,j].FillColor = Color.Green;
-                        }
+                        screenDot.FillColor = Color.Green;
                     }
-                    window.Draw(screenDot[i,j]);
+                    window.Draw(screenDot);
                 }
             }
         }

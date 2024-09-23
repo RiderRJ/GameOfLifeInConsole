@@ -9,10 +9,5 @@
             CellsLife();
             Draw();
         }
-        public override void Init()
-        {
-            base.Init();
-            ReadMap();
-        }
     }
 }

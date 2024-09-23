@@ -5,10 +5,10 @@ namespace GameOfLife
 {
     public sealed class RuleConstructor
     {
-        private List<Tuple<short, char>> deadArgs;
-        private List<Tuple<short, char>> liveArgs;
-        private int neighsArgs;
-        private Cell[] neightWMaskArgs;
+        public List<Tuple<short, char>> deadArgs;
+        public List<Tuple<short, char>> liveArgs;
+        public int neighsArgs;
+        public Cell[] neightWMaskArgs;
         //меню с выбором сверху
         //снизу список с выбранным и деталями.
         //функционал меню выбора:

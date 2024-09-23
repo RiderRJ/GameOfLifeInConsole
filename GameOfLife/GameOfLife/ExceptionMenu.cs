@@ -4,7 +4,8 @@ namespace GameOfLife
 {
     public sealed class ExceptionMenu : Window
     {
-        private static string[] exceptionWord = new string[] { "GOT IT!", "OH...", "OK", "GTFO!" ,"KK", "MAMA MIA", "БЛЯТЬ", "ЗАВАЛИ"};
+        private static string[] exceptionWord = new string[] { "GOT IT!", "OH...", "OK", "GTFO!" ,"KK", "MAMA MIA", "БЛЯТЬ", "ЗАВАЛИ"
+        ,"ЛАГАЕТ","*зевок*","*заткнул уши*","OK, THEN?","HUESOSI!!!"};
         public ExceptionMenu(string content, WindowType type, string[] btnVariants = null, string title = "") : base(content, type, btnVariants,title)
         {
 
