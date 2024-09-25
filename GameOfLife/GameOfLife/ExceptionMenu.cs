@@ -6,16 +6,16 @@ namespace GameOfLife
     {
         private static string[] exceptionWord = new string[] { "GOT IT!", "OH...", "OK", "GTFO!" ,"KK", "MAMA MIA", "БЛЯТЬ", "ЗАВАЛИ"
         ,"ЛАГАЕТ","*зевок*","*заткнул уши*","OK, THEN?","HUESOSI!!!"};
-        public ExceptionMenu(string content, WindowType type, string[] btnVariants = null, string title = "") : base(content, type, btnVariants,title)
+        public ExceptionMenu(string content, WindowType type, string title = "") : base(content, type, title) //педик на вижуал заставил меня это сделать
         {
-
+            throw new NotImplementedException("Программист хуесос!");
         }
         public static void Throw(object exception)
         {
             string message = exception is Exception ?
                 (exception as Exception).Message :
                 exception.ToString();
-            new Window(message, WindowType.Message, exceptionWord);
+            new Window(message, new WindowMessage(exceptionWord));
         }
     }
 }

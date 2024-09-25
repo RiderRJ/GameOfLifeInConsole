@@ -42,21 +42,13 @@ namespace GameOfLife
                 instance.Update();
                 Frames++;
                 fps.DisplayedString = Fps.ToString();
-                #region Отслеживание потока памяти
-                //using (Stream stream = new MemoryStream())
-                //{
-                //    IFormatter formatter = new BinaryFormatter();
-                //    formatter.Serialize(stream, Cell.cells);
-                //    Console.WriteLine((float)stream.Length/1024/1024);
-                //}
-                #endregion
                 window.Draw(fps);
                 window.Display();
             }
         }
         private static void CreateWindow()
         {
-            window = new RenderWindow(new VideoMode(800, 600), "Game of life");
+            window = new RenderWindow(new VideoMode(1000, 1000), "Game of life");
             window.Closed += (sender, e) => window.Close();
             window.KeyPressed += (sender, e) =>
             {

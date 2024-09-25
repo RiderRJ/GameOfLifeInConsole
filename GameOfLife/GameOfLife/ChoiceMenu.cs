@@ -11,7 +11,6 @@ namespace GameOfLife
         string[] choices = { "Рандомная генерация поля", "Режим песочницы" , "Кастомный режим"};
         Program[] scenes = new Program[] { new RandomField(35), new Sandbox(), new CustomGameMenu()};
         List<Button> buttons = new List<Button>();
-        List<Text> buttonTexts = new List<Text>();
         public override void Init()
         {
             gameController.X = 0;

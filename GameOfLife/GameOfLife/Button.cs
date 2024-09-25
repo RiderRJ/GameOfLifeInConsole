@@ -1,23 +1,10 @@
 ﻿using SFML.Graphics;
 using System;
-using System.Security.Cryptography;
 
 namespace GameOfLife
 {
-    public static class RenderWindowExtensions
-    {
-        public static void Draw(this RenderWindow window, IExtentedDrawable whatToDraw)
-        {
-            whatToDraw.Draw(window);
-        }
-    }
-    public interface IExtentedDrawable
-    {
-        void Draw(RenderWindow window);
-    }
     public class Button : RectangleShape, IExtentedDrawable
     {
-        //Добавить текст прям сюда
         public Action OnClickEvent;
         public Text btnText;
         public static Button CreateButton(RectangleShape shape, Action action = null, string buttonText = "") => shape switch
@@ -50,6 +37,5 @@ namespace GameOfLife
             window.Draw(this);
             window.Draw(btnText);
         }
-        //Хз как добавить отрисовку текста вместе с кнопкой
     }
 }

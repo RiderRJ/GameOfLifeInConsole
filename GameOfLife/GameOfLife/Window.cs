@@ -1,43 +1,30 @@
 ﻿using SFML.Graphics;
 using SFML.System;
-using SFML.Window;
 using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
-using static SFML.Window.Mouse;
 
 namespace GameOfLife
 {
     public class Window
     {
-        public enum WindowType
-        {
-            Message,
-            YoN,
-        };
-        public static bool accepted;
+        public bool Accepted { get; private set; }
+        public bool Denied { get; private set; }
         private WindowType m_Type;
-        private string[] m_OkBtnVariants;
         private string m_Content;
         private string m_Title;
-        private List<Text> btnContents = new List<Text>();
-        private List<Button> btns = new List<Button>();//
+        private List<Button> btns = new List<Button>();
         private RectangleShape window;
         private Text title;
         private Text content;
-        Controller global_Controller;
-        public Window(string content,WindowType type, string[] btnVariants = null, string title = "Something happened!")
+        Controller global_Controller; //Кажется необходимо создать локальный контроллер для окна сообщения
+        public Window(string content, WindowType type, string title = "Something happened!")
         {
             m_Content = content;
             m_Title = title;
             m_Type = type;
-            m_OkBtnVariants = btnVariants ?? (new string[] { "Ok" });
             global_Controller = ApplicationHolder.gameController;
-            global_Controller.X = type == WindowType.Message ? (ushort)1 : (ushort)2;
+            global_Controller.X = type.buttonsNum;
             global_Controller.Y = 0;
             CreateWindow();
         }
@@ -47,12 +34,12 @@ namespace GameOfLife
         private void CreateWindow()
         {
             InitObjects();
-            while (accepted is false)
+            while (!Accepted || !Denied)
             {
                 DrawWindow();
             }
         }
-        private void InitObjects()
+        private void InitObjects() //код не читаемый
         {
             float padding = 20f;
             float buttonHeight = 30f;
@@ -79,7 +66,7 @@ namespace GameOfLife
             title.Position = window.Position + new Vector2f(padding, padding);
             content.Position = title.Position + new Vector2f(0, title.CharacterSize + 10);
             float buttonWidth = 80f;
-            for (int i = 0; i < (m_Type == WindowType.Message ? 1 : 2); i++)
+            for (int i = 0; i < m_Type.buttonsNum; i++)
             {
                 float buttonPosX = window.Position.X + padding + i * (buttonWidth + buttonSpacing);
                 float buttonPosY = window.Position.Y + windowSize.Y - buttonHeight - padding;
@@ -87,9 +74,9 @@ namespace GameOfLife
                 {
                     Position = new Vector2f(buttonPosX, buttonPosY),
                     FillColor = new Color(105, 105, 105),
-                },null,
-                m_Type == WindowType.Message ? m_OkBtnVariants[ApplicationHolder.rnd
-                    .Next(0, m_OkBtnVariants.Length)] : (i == 0 ? "Yes" : "No")));
+                },
+                (i == 0) ? () => { Accepted = true; } : () => { Denied = true; }, //Заменить
+                m_Type.GetText()));
                 btns.Last().btnText.Position = btns.Last().Position + new Vector2f(
                     (buttonWidth - btns.Last().btnText.GetLocalBounds().Width) / 2,
                     (buttonHeight - btns.Last().btnText.CharacterSize) / 2

@@ -75,13 +75,18 @@
     <Compile Include="CustomGameMenu.cs" />
     <Compile Include="ExceptionMenu.cs" />
     <Compile Include="GameField.cs" />
+    <Compile Include="IExtentedDrawable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RandomField.cs" />
+    <Compile Include="RenderWindowExtensions.cs" />
     <Compile Include="RuleConstructor.cs" />
     <Compile Include="Sandbox.cs" />
     <Compile Include="Thinker.cs" />
     <Compile Include="Window.cs" />
+    <Compile Include="WindowMessage.cs" />
+    <Compile Include="WindowType.cs" />
+    <Compile Include="WindowYoN.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.editorconfig">

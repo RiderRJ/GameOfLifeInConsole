@@ -18,6 +18,12 @@ namespace GameOfLife
     [Serializable]
     public sealed class Cell : Thinker
     {
+        public Cell(short x, short y, short alive)
+        {
+            onChangeState += OnChangeState;
+            this.x = x; this.y = y;
+            Alive = alive;
+        }
         //найти способ уменьшить потребление
         public static List<List<Cell>> cells = new List<List<Cell>>();
         public static Rule rule;
@@ -31,17 +37,6 @@ namespace GameOfLife
             set => alive = value;
         }
         private short nextMoveAlive;
-        public short NextMoveAlive
-        {
-            get => nextMoveAlive;
-            set => nextMoveAlive = value;
-        }
-        public Cell(short x, short y, short alive)
-        {
-            onChangeState += OnChangeState;
-            this.x = x; this.y = y;
-            Alive = alive;
-        }
         /// <summary>
         /// Принимают решение на следующий ход
         /// </summary>

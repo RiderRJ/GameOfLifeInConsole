@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace GameOfLife
 {
     public sealed class RuleConstructor
     {
-        public List<Tuple<short, char>> deadArgs;
-        public List<Tuple<short, char>> liveArgs;
+        public List<(short, char)> deadArgs = new();
+        public List<(short, char)> liveArgs = new();
         public int neighsArgs;
-        public Cell[] neightWMaskArgs;
+        public Cell[][] neightWMaskArgs;
+        public int fillPercent;
         //меню с выбором сверху
         //снизу список с выбранным и деталями.
         //функционал меню выбора:

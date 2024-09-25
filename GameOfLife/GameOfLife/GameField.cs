@@ -1,16 +1,14 @@
 ﻿using SFML.Graphics;
 using SFML.System;
 using SFML.Window;
-using System.Linq;
-using System.Threading.Tasks;
 using static GameOfLife.Cell;
 
 namespace GameOfLife
 {
     public abstract class GameField : Program
     {
-        protected static short height = 100; //300:300 = 5fps
-        protected static short width = 100;
+        protected static short height = 200; //300:300 = 5fps
+        protected static short width = 200;
         public static char[,] Map { get; protected set; } = new char[width, height];
         protected bool _resumed = true;
         protected RectangleShape screenDot = new RectangleShape();
@@ -48,15 +46,15 @@ namespace GameOfLife
         }
         protected void Draw()
         {
-            float cWidth = window.Size.X * (1f / Map.GetLength(0)) * 1.25f;
-            float cHeight = window.Size.Y * (1f / Map.GetLength(1)) * 1.75f;
+            float cWidth = window.Size.X / Map.GetLength(0);
+            float cHeight = window.Size.Y / Map.GetLength(1);
             screenDot.OutlineColor = new Color(120, 120, 120);
             screenDot.OutlineThickness = 1f;
             for (short i = 0; i < Map.GetLength(0); i++)
             {
                 for (short j = 0; j < Map.GetLength(1); j++)
                 {
-                    screenDot.Position = new Vector2f(i * cWidth / 2, j * cHeight / 2);
+                    screenDot.Position = new Vector2f(i * cWidth, j * cHeight);
                     screenDot.Size = new Vector2f(cWidth, cHeight);
                     screenDot.FillColor = cells[i][j].Alive == 1 ? Color.White : new Color(25, 25, 25);
                     if (!_resumed && gameController.Choice[0, 0] == i && gameController.Choice[0, 1] == j)
